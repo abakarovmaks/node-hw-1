@@ -1,3 +1,4 @@
+const { EMFILE } = require('constants');
 const fs = require('fs');
 const path = require('path');
 
@@ -65,5 +66,34 @@ function removeContact(contactId) {
 }
 
 function addContact(name, email, phone) {
-  // ...твой код
+  fs.readFile(contactsPath, (err, data) => {
+    if (err) {
+      console.error(err);
+    }
+    const rawData = data.toString();
+    let contactsList;
+    let id;
+
+    if (!rawData) {
+      contactsList = [];
+      id = 1;
+    } else {
+      contactsList = JSON.parse(rawData);
+      id = contactsList.length = 0
+        ? 1
+        : contactsList[contactsList.length - 1].id + 1;
+    }
+    if (name & email & phone) {
+      contactsList.push({ id, name, email, phone });
+      fs.writeFile(contactsPath, JSON.stringify(contactsList), (err) => {
+        if (err) {
+          console.error(err);
+        }
+        console.log('Contact was added successfully!');
+        console.table(contactsList);
+      });
+    }
+  });
 }
+
+module.exports = { listContacts, removeContact, addContact, getContactById };
