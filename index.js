@@ -1,10 +1,33 @@
-const http = require('http');
+const {
+  listContacts,
+  removeContact,
+  addContact,
+  getContactById,
+} = require('./contacts');
 
-const server = http.createServer((req, res) => {
-  res.end('<h1>Hello everyone</h1>');
-});
-const port = 3000;
+const argv = require('yargs').argv;
 
-server.listen(port, () => {
-  console.log('Server has been started');
-});
+function invokeAction({ action, id, name, email, phone }) {
+  switch (action) {
+    case 'list':
+      listContacts();
+      break;
+
+    case 'get':
+      getContactById(+id);
+      break;
+
+    case 'add':
+      addContact(name, email, phone);
+      break;
+
+    case 'remove':
+      removeContact(+id);
+      break;
+
+    default:
+      console.warn('\x1B[31m Unknown action type!');
+  }
+}
+
+invokeAction(argv);
