@@ -1,4 +1,3 @@
-const { EMFILE } = require('constants');
 const fs = require('fs');
 const path = require('path');
 
@@ -51,8 +50,8 @@ function removeContact(contactId) {
       process.exit(1);
     }
     const contactsList = JSON.parse(rawData);
-    const filteredContact = contactsList.filter(({ id }) => id === contactId);
-    if (contactsList.length !== filteredContact) {
+    const filteredContact = contactsList.filter(({ id }) => id !== contactId);
+    if (contactsList.length !== filteredContact.length) {
       fs.writeFile(contactsPath, JSON.stringify(filteredContact), (err) => {
         if (err) {
           console.error(err);

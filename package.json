@@ -23,7 +23,8 @@
   },
   "homepage": "https://github.com/abakarovmaks/node-hw-1#readme",
   "dependencies": {
-    "chalk": "^4.1.0"
+    "chalk": "^4.1.0",
+    "commander": "^7.2.0"
   },
   "devDependencies": {
     "nodemon": "^2.0.7"
