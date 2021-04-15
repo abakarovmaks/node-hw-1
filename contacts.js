@@ -43,16 +43,16 @@ function getContactById(contactId) {
 function removeContact(contactId) {
   fs.readFile(contactsPath, (err, data) => {
     if (err) {
-      console.error(err);
+      console.error(err.message);
     }
     const rawData = data.toString();
     if (!rawData) {
       process.exit(1);
     }
     const contactsList = JSON.parse(rawData);
-    const filteredContact = contactsList.filter(({ id }) => id !== contactId);
-    if (contactsList.length !== filteredContact.length) {
-      fs.writeFile(contactsPath, JSON.stringify(filteredContact), (err) => {
+    const filteredContacts = contactsList.filter(({ id }) => id !== contactId);
+    if (contactsList.length !== filteredContacts.length) {
+      fs.writeFile(contactsPath, JSON.stringify(filteredContacts), (err) => {
         if (err) {
           console.error(err);
           process.exit(1);
@@ -72,17 +72,18 @@ function addContact(name, email, phone) {
     const rawData = data.toString();
     let contactsList;
     let id;
-
     if (!rawData) {
       contactsList = [];
       id = 1;
     } else {
       contactsList = JSON.parse(rawData);
-      id = contactsList.length = 0
-        ? 1
-        : contactsList[contactsList.length - 1].id + 1;
+      id =
+        contactsList.length === 0
+          ? 1
+          : contactsList[contactsList.length - 1].id + 1;
     }
-    if (name & email & phone) {
+
+    if (name && email && phone) {
       contactsList.push({ id, name, email, phone });
       fs.writeFile(contactsPath, JSON.stringify(contactsList), (err) => {
         if (err) {
